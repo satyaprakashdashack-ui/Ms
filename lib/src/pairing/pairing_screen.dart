@@ -1,0 +1,4 @@
+import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+
+class PairingScreen extends StatelessWidget { const PairingScreen({super.key}); @override Widget build(BuildContext context){ const code='123456'; return Scaffold(appBar:AppBar(title:const Text('Pair child device')),body:ListView(padding:const EdgeInsets.all(24),children:[const Text('Share this invite only with the child device owner. Pairing remains pending until a guardian approves it.'),const SizedBox(height:24),Center(child:QrImageView(data:'guardian-parent://pair?family=demo&code=$code',size:220)),const SizedBox(height:12),Center(child:Text(code,style:Theme.of(context).textTheme.displaySmall)),const Divider(),ListTile(leading:const Icon(Icons.verified_user),title:const Text('Parent approval required'),subtitle:const Text('The child app must disclose permissions and request consent before activation.'))]));}}
