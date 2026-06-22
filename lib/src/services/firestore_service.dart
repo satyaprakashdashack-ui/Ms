@@ -25,6 +25,20 @@ class FirestoreService {
     return doc.id;
   }
 
+  Future<FamilyAccount> getOrCreateFamilyForCurrentUser() async {
+    final existing = await _db.collection('families').where('createdBy', isEqualTo: _uid).limit(1).get();
+    if (existing.docs.isNotEmpty) {
+      final doc = existing.docs.first;
+      return FamilyAccount.fromJson(doc.id, doc.data());
+    }
+
+    final user = _ref.read(firebaseAuthProvider).currentUser;
+    final familyName = _familyNameFor(user?.displayName ?? user?.email);
+    final familyId = await createFamily(familyName);
+    final family = await _db.doc('families/$familyId').get();
+    return FamilyAccount.fromJson(family.id, family.data()!);
+  }
+
   Future<void> requestPairing({required String familyId, required String childName, required Map<String, Object?> deviceInfo}) async {
     await _db.collection('families/$familyId/pairingRequests').add({'childName': childName, 'deviceInfo': deviceInfo, 'status': PairingStatus.pendingParentApproval.name, 'requestedAt': FieldValue.serverTimestamp(), 'consent': true});
   }
@@ -37,4 +51,11 @@ class FirestoreService {
   }
 
   Future<void> saveRules(String familyId, String deviceId, DeviceRule rules) => _db.doc('families/$familyId/devices/$deviceId/rules/current').set(rules.toJson(), SetOptions(merge: true));
+
+  String _familyNameFor(String? ownerName) {
+    final normalized = ownerName?.trim();
+    if (normalized == null || normalized.isEmpty) return 'My family';
+    final firstPart = normalized.split('@').first.trim();
+    return firstPart.isEmpty ? 'My family' : '$firstPart family';
+  }
 }

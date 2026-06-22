@@ -7,6 +7,12 @@ class FamilyAccount {
   final String name;
   final String inviteCode;
   final String createdBy;
+  factory FamilyAccount.fromJson(String id, Map<String, dynamic> json) => FamilyAccount(
+    id: id,
+    name: json['name'] as String? ?? 'My family',
+    inviteCode: json['inviteCode'] as String? ?? '',
+    createdBy: json['createdBy'] as String? ?? '',
+  );
   Map<String, Object?> toJson() => {'name': name, 'inviteCode': inviteCode, 'createdBy': createdBy};
 }
 
