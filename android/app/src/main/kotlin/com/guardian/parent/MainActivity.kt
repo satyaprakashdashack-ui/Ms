@@ -1,0 +1,5 @@
+package com.guardian.parent
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity: FlutterActivity()

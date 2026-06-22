@@ -1,0 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+class ChildSetupScreen extends StatelessWidget { const ChildSetupScreen({super.key}); @override Widget build(BuildContext context)=>Scaffold(appBar:AppBar(title:const Text('Child setup wizard')),body:ListView(padding:const EdgeInsets.all(24),children:[Text('Welcome',style:Theme.of(context).textTheme.headlineMedium),const Text('Guardian Parent works only when this device owner understands and accepts monitoring. It never hides itself or bypasses Android security.'),const SizedBox(height:16),const ConsentCard(title:'What parents can see',body:'Device status, app usage summaries, location when allowed, safety alerts, and screen-time reports.'),const ConsentCard(title:'What parents cannot see',body:'Private message contents, passwords, secret recordings, or data from apps that Android does not permit.'),FilledButton(onPressed:()=>context.go('/permissions'),child:const Text('Continue to permissions'))]));}
+}
+class ConsentCard extends StatelessWidget{ const ConsentCard({super.key,required this.title,required this.body}); final String title; final String body; @override Widget build(BuildContext context)=>Card(child:ListTile(leading:const Icon(Icons.info),title:Text(title),subtitle:Text(body)));}
